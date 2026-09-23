@@ -1,0 +1,108 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import GraphicSpecies from "../../components/GraphicSpecies.astro";
+
+const speciesList = ["Adelie", "Gentoo", "Chinstrap"];
+---
+
+<Layout title="Toutes les espèces — Manchots de Palmer">
+    <main class="ml-40 mt-10">
+        <h1>Espèces de manchots</h1>
+
+        <nav class="species-nav" aria-label="Navigation par espèce">
+            <label for="species">Choisir une espèce</label>
+            <select id="species">
+                {
+                    speciesList.map((species) => (
+                        <option value={species.toLowerCase()}>{species}</option>
+                    ))
+                }
+            </select>
+        </nav>
+
+        <div class="slider">
+            {
+                speciesList.map((species) => (
+                    <section class="slide item" id={species.toLowerCase()}>
+                        <GraphicSpecies species={species} />
+                    </section>
+                ))
+            }
+        </div>
+
+        <p class="mt-8">
+            <a href="/" class="text-blue-600 hover:underline"
+                >← Retour à l'accueil</a
+            >
+        </p>
+    </main>
+</Layout>
+
+<style>
+    .species-nav {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .species-nav label {
+        font-weight: bold;
+    }
+
+    .species-nav select {
+        min-width: 12rem;
+        padding: 0.35rem;
+    }
+
+    .slider {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        gap: 2rem;
+    }
+
+    .slide {
+        flex: 0 0 100%;
+        scroll-snap-align: start;
+    }
+</style>
+
+<script>
+    const speciesSelect = document.querySelector(
+        "#species",
+    ) as HTMLSelectElement | null;
+    const items = document.querySelectorAll(".item");
+
+    speciesSelect?.addEventListener("change", (event) => {
+        const value = (event.target as HTMLSelectElement).value;
+        location.hash = value;
+    });
+
+    const initialHash = location.hash.slice(1);
+    if (
+        initialHash &&
+        speciesSelect?.querySelector(`option[value="${initialHash}"]`)
+    ) {
+        speciesSelect.value = initialHash;
+    }
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                const id = entry.target.getAttribute("id");
+                if (entry.isIntersecting) {
+                    if (id && speciesSelect) {
+                        speciesSelect.value = id;
+                    }
+                }
+            });
+        },
+        { threshold: 0.5 },
+    );
+
+    items.forEach((item) => {
+        observer.observe(item);
+    });
+</script>
