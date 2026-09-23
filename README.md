@@ -1,7 +1,7 @@
-- URL site WEB :
+- URL site WEB : https://tp4-r312m.netlify.app
 - URL Notebook Observable :
-- Nom :
-- Prénom :
+- Nom : Girardin Tarby 
+- Prénom : Mathéo
 - Nom binome :
 - Prénom binome :
 

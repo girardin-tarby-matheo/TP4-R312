@@ -7,11 +7,18 @@ const speciesList = ["Adelie", "Gentoo", "Chinstrap"];
 
 <Layout title="Toutes les espèces — Manchots de Palmer">
     <main class="ml-40 mt-10">
-        <h1>Espèces de manchots</h1>
+        <h1 class="mb-4 text-3xl font-bold">Espèces de manchots</h1>
 
-        <nav class="species-nav" aria-label="Navigation par espèce">
-            <label for="species">Choisir une espèce</label>
-            <select id="species">
+        <nav
+            aria-label="Navigation par espèce"
+            class="mb-4 flex items-center gap-3"
+        >
+            <label for="species" class="font-bold"> Choisir une espèce </label>
+
+            <select
+                id="species"
+                class="min-w-48 rounded border border-gray-300 px-2 py-1"
+            >
                 {
                     speciesList.map((species) => (
                         <option value={species.toLowerCase()}>{species}</option>
@@ -20,59 +27,30 @@ const speciesList = ["Adelie", "Gentoo", "Chinstrap"];
             </select>
         </nav>
 
-        <div class="slider">
+        <div
+            class="flex snap-x snap-mandatory gap-8 overflow-x-auto scroll-smooth"
+        >
             {
                 speciesList.map((species) => (
-                    <section class="slide item" id={species.toLowerCase()}>
+                    <section
+                        class="item w-full flex-shrink-0 snap-start"
+                        id={species.toLowerCase()}
+                    >
                         <GraphicSpecies species={species} />
                     </section>
                 ))
             }
         </div>
 
-        <p class="mt-8">
-            <a href="/" class="text-blue-600 hover:underline"
-                >← Retour à l'accueil</a
-            >
-        </p>
+        <p class="mt-8">/ ← Retour à l'accueil</p>
     </main>
 </Layout>
-
-<style>
-    .species-nav {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        margin-bottom: 1rem;
-    }
-
-    .species-nav label {
-        font-weight: bold;
-    }
-
-    .species-nav select {
-        min-width: 12rem;
-        padding: 0.35rem;
-    }
-
-    .slider {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
-        gap: 2rem;
-    }
-
-    .slide {
-        flex: 0 0 100%;
-        scroll-snap-align: start;
-    }
-</style>
 
 <script>
     const speciesSelect = document.querySelector(
         "#species",
     ) as HTMLSelectElement | null;
+
     const items = document.querySelectorAll(".item");
 
     speciesSelect?.addEventListener("change", (event) => {
@@ -81,6 +59,7 @@ const speciesList = ["Adelie", "Gentoo", "Chinstrap"];
     });
 
     const initialHash = location.hash.slice(1);
+
     if (
         initialHash &&
         speciesSelect?.querySelector(`option[value="${initialHash}"]`)
@@ -92,6 +71,7 @@ const speciesList = ["Adelie", "Gentoo", "Chinstrap"];
         (entries) => {
             entries.forEach((entry) => {
                 const id = entry.target.getAttribute("id");
+
                 if (entry.isIntersecting) {
                     if (id && speciesSelect) {
                         speciesSelect.value = id;
